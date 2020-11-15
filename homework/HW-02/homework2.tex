@@ -1,0 +1,284 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[top = 2.5cm, bottom = 2.5cm, left = 2.5cm, right = 2.5cm]{geometry} 
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{multirow} % Multirow is for tables with multiple rows within one cell.
+\usepackage{booktabs} % For even nicer tables.
+
+% As we usually want to include some plots (.pdf files) we need a package for that.
+\usepackage{graphicx} 
+\usepackage{amsmath} % to use split function
+\usepackage{algorithm} 
+\usepackage{algpseudocode} 
+% The default setting of LaTeX is to indent new paragraphs. This is useful for articles. But not really nice for homework problem sets. The following command sets the indent to 0.
+\usepackage{setspace}
+\setlength{\parindent}{0in}
+
+% Package to place figures where you want them.
+\usepackage{float}
+\usepackage{float}
+\usepackage{forest}
+\usepackage{graphicx}
+\usepackage{tikz-qtree}
+\usepackage{tikz}
+\usepackage{fancybox}
+%\usepackage[active,tightpage]{preview}
+%\PreviewEnvironment{tikzpicture}
+%\setlength\PreviewBorder{1pt}%
+
+% The fancyhdr package let's us create nice headers.
+\usepackage{fancyhdr}
+\pagestyle{fancy} % With this command we can customize the header style.
+
+\fancyhf{} % This makes sure we do not have other information in our header or footer.
+
+\lhead{\footnotesize Algorithms: Homework 2}% \lhead puts text in the top left corner. \footnotesize sets our font to a smaller size.
+
+%\rhead works just like \lhead (you can also use \chead)
+\rhead{\footnotesize Yu-Chieh Kuo} %<---- Fill in your lastnames.
+
+% Similar commands work for the footer (\lfoot, \cfoot and \rfoot).
+% We want to put our page number in the center.
+\cfoot{\footnotesize \thepage} 
+
+\begin{document}
+\thispagestyle{plain} % This command disables the header on the first page. 
+
+\begin{tabular}{p{15.5cm}} % This is a simple tabular environment to align your text nicely 
+{\large \bf The Design and Analysis of Algorithms} \\
+Ho-Lin Chen, National Taiwan University, Fall 2020  \\
+\hline % \hline produces horizontal lines.
+\\
+\end{tabular} % Our tabular environment ends here.
+
+\vspace*{0.3cm} % Now we want to add some vertical space in between the line and our title.
+
+\begin{center} % Everything within the center environment is centered.
+	{\Large \bf Homework 2} % <---- Don't forget to put in the right number
+	\vspace{2mm}
+	
+        % YOUR NAMES GO HERE
+	{\bf Yu-Chieh Kuo B07611039} % <---- Fill in your names here!
+		
+\end{center}  
+\begin{center}
+\textbf{Study Group Members:} \\
+\textbf{b06201057 Yu-Chi Hsieh, r08323002 Ze-Wei Chen,b06202004 Han-Wen Chang.}
+\end{center}
+
+\vspace{0.4cm}
+This homework answers the problem set sequentially. 
+
+\begin{enumerate}
+
+%problem 1
+\item { \textbf{Collaborators: Study Group Members} \\
+\begin{center}
+\begin{tabular}{ | m | m | m | m | m | m | } 
+\hline
+Problem & (1) & (2) & (3) & (4) \\
+\hline
+Bubble Sort & $\theta(n^2)$ & Yes & $\theta (n^2)$ & $\theta(n^2)$ \\ 
+ \hline
+ Merge Sort & $\theta(n\log n)$ & Yes & $\theta (n\log n)$ & $\theta(n\log n)$ \\ 
+ \hline
+ Insertion Sort & $\theta(n^2)$ & Yes & $\theta (n)$ & $\theta(n^2)$ \\ 
+ \hline
+ Quick Sort & $\theta(n^2)$ & Yes & $\theta (n\log n)$ & $\theta(n^2)$ \\ 
+ \hline
+ Heap Sort & $\theta(n\log n)$ & No & $\theta (n\log n)$ & $\theta(n\log n)$ \\ 
+\hline
+\end{tabular}
+\end{center}
+
+}
+
+%problem 2
+\item{ \textbf{Collaborators: None} \\ The pseudo code of algorithm is as below.
+\begin{algorithm}
+	\caption{CyclicShiftFindMin(Array)} 
+	\begin{algorithmic}[1]
+	    \State $low$ $\leftarrow$ index of the first element
+	    \State $high$ $\leftarrow$ index of the last element
+		\While{Array[low] > Array[high]}
+		    \State $mid \gets \lfloor \frac{low + high}{2} \rfloor$
+		    \If{Array[$low$] < Array[$mid$]}
+		        \State $low \gets mid + 1$
+		    \Else{}
+		        \State $high \gets mid$
+		    \EndIf
+		\EndWhile
+		\State \textbf{return} Array[$low$]
+	\end{algorithmic} 
+\end{algorithm}
+
+\textbf{Correctness:} \\ There are three cases for this problem: $mid$ at left side, in the middle, and at right side. All three cases can find the minimum after running algorithm since this algorithm will change the searching boundary until finding the minimum. \\
+\textbf{Running Time:} \\ At iteration 1, the number of total searching elements is $n$, and it will be halved until finding the minimum element in the array, which costs $k$ iterations and $\frac{n}{2^k} = 1$. Therefore, we have the running time $i.e.$ the count of iterations is $k = \log _2n \in O(\log n)$.
+
+}
+
+%problem 3
+\item {
+\begin{enumerate}
+    \item { \textbf{Collaborators: None} \\ The pseudo code of algorithm is as below.
+    \newline
+\begin{algorithm}
+	\caption{SortAlmostSortedArray(Array, $k$)} 
+	\begin{algorithmic}[1]
+	    \State $N \gets$ size of Array
+	    \For{$i = 1,2, \ldots \frac{N}{k-1}$}
+	        \State sort Array[$ik \ldots ik + 2k$]
+	    \EndFor
+	\end{algorithmic} 
+\end{algorithm}
+
+\textbf{Correctness:} \\
+Since this array is almost sorted by mismatching at most $k$ spot from its actual location, therefore, sorting $2k$ elements from beginning to end will ensure that in each sorting iteration, the first $k$'s element will be in the right location. \\
+\textbf{Running Time:} \\
+All $N$ elements are sorted by at most k times, the time complexity is $O(n) \in O(n \log k)$.
+}
+
+\item {  \textbf{Collaborators: None} \\
+We have all possible case is $(k!)^{\frac{n}{k}}$. According to the decision tree, the time complexity is
+\[
+\begin{split}
+    O(n) & \geq \log _2(k!)^{\frac{n}{k}} \\ 
+    & \geq \frac{n}{k} \log _2 (k!) \\ 
+    & = \frac{n}{k} (k\log _2k - k\log _2e + O(\log _2k)) \\
+    & \geq n\log _2k \\
+    & \in \Omega (n\log k)
+\end{split}
+\]
+}
+
+\end{enumerate}
+}
+
+%problem 4
+\item{
+
+\begin{enumerate}
+    \item {\textbf{Collaborators: None} \\ 
+Let $c_1 = 1, c_2 = 100000, c_3 = 101, n_1 = 999, n_2 = 1000, n_3 = 1, n = 1000$. Since $\frac{c_1}{n_1}\leq \frac{c_2}{n_2} \leq \frac{c_3}{n_3}$, by greedy algorithm, the total cost is $1+100000=100001$ but the optimal solution should be $1+101 = 102$.
+}
+    \item{ \textbf{Collaborators: Study Group Members} \\
+By greedy algorithm, we let it pick machine $T_1 + T_2 + \cdots + T_k$ or $T_{k+1}$ such that we have $\min \sum _i T_i, i \in the \ solution \ set$, and we denote the greedy solution as $G^*$. If we let machine be able to produce partial masks instead of producing whole $n_i$ masks, the optimal solution
+\[
+\begin{split}
+    OPT \leq G^* & = T_1 + \cdots + T_k + some \ of \ T_{k+1} \\
+    & \leq G^* + 4G^* \\
+    & \leq 5G^*
+\end{split}
+\]
+}
+\end{enumerate}
+
+}
+
+%problem 5
+\item{ 
+\begin{enumerate}
+    \item { \textbf{Collaborators: Study Group Members} \\ The pseudo code of algorithm is as below.
+\begin{algorithm}
+	\caption{DynamicProgramming} 
+	\begin{algorithmic}[1]
+	    \State Let C[n,m] be the dp table
+	    \State C[0,k] $\gets$ 0 $\forall k \geq 0$
+	    \State C[j,0] $\gets \infty \forall j > 0$
+	    \State C[j,k] = 0 $\forall j < 0, k \geq 0$
+	    \For{$j = 1 \ldots n$}
+	        \For{$k = 1 \ldots m$}
+	            \State C[j,k] = $\min (c_j + C[j-1, k-n[j]], C[j-1,k])$
+	            \State B[j,k] = 0 or 1 dependent on C[j,k]
+	        \EndFor
+	    \EndFor
+	    \State \textbf{return} C[m,n]
+	\end{algorithmic} 
+\end{algorithm}
+    } %item1 end
+    \item { \textbf{Collaborators: None} \\
+Rewrite the relationship of $T_i$ as the following statement. Let $T_i$ be connected with $T_{i+1}$ and $T_{i+2}$, where $i \in odd$. $T_j$ will be a leaf if $j \in even$. The relation tree might be as below. \\
+\begin{center}
+    \begin{forest}
+desc/.style={
+    tikz+={
+      \node [anchor=mid west, red] at (.mid -| desc coord) {#1};
+    }
+},
+tikz+={
+    \coordinate (desc coord) at (current bounding box.east);
+  },
+for tree={}
+    [ $T_1$ % root
+        [ $T_2$ % layer1-left
+        ]
+        [$T_3$, %layer2-right
+            [$T_4$]
+            [$T_5$
+                [$T_6$]
+                [$T_{2k-1}$, edge = dotted, l = 1.5cm
+                    [$T_{2k}$] [NONE, edge = dotted]
+                    
+                ]
+            ]
+        ]
+    ]
+\end{forest} 
+\end{center}
+Let $T[i]$ be the strategy for selecting node $i$, $T'[i]$ be the strategy for not selecting node $i$, $A[i] = \min \sum c_i$ from $T[i]$, $A'[i] = min \sum c_i$ from $T'[i]$, we have
+\[
+\begin{split}
+    & A'[i] = A[i+1] + A[i+2] \\
+    & A[i] = \min \{ A'[i], \ c_i + A'[i+1] + A'[i+2] \}
+\end{split}
+\]
+Note that if $i$ is even, $A'[i] = \{ \}$ and $A[i] = c_i$.
+
+}
+    
+\end{enumerate}
+
+}
+
+%problem 6
+\item{ \textbf{Collaborators: None} \\
+The relationship for each bread is as below. \\
+
+\begin{center}
+    \begin{forest}
+desc/.style={
+    tikz+={
+      \node [anchor=mid west, red] at (.mid -| desc coord) {#1};
+    }
+},
+tikz+={
+    \coordinate (desc coord) at (current bounding box.east);
+  },
+for tree={}
+    [ $b_1$ % root
+        [$b_2$ % layer1-left
+            [$b_4$ [,edge = dotted][,edge = dotted]]
+            [$b_5$ [,edge = dotted][,edge = dotted]]
+        ]
+        [$b_3$, %layer2-right
+            [$b_6$ [,edge = dotted][,edge = dotted]]
+            [$b_7$ [,edge = dotted][,edge = dotted]
+            ]
+        ]
+    ]
+\end{forest} 
+\end{center}
+Let $T[i]$ be the strategy for selecting node $i$, $T'[i]$ be the strategy for not selecting node $i$, $A[i] = \max \sum P_i$ from $T[i]$, $A'[i] = \max \sum P_i$ from $T'[i]$, we have
+\[
+\begin{split}
+    & A'[i] = A[2i] + A[2i+1] \\
+    & A[i] = \max \{ A'[i], \ P_i + A'[2i] + A'[2i+1] \}
+\end{split}
+\]
+
+}
+
+
+\end{enumerate}
+
+\end{document}
